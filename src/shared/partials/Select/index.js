@@ -3,13 +3,13 @@ import './style.scss';
 import { ReactComponent as IconArrowDown } from '@assets/icons/ic-arrow-down.svg';
 import { ReactComponent as IconArrowUp } from '@assets/icons/ic-arrow-up.svg';
 
-export const Select = ({ className, placeholder, options, value, onChange }) => {
+export const Select = ({ className, placeholder, options, value, onChange, readOnly }) => {
   const [open, setOpen] = useState(false);
   const [internalValue, setInternalValue] = useState();
 
   const selectItem = (ops) => {
     setInternalValue({ ...ops });
-    onChange(ops);
+    onChange(ops.value);
   }
 
   useEffect(() => {
@@ -19,9 +19,15 @@ export const Select = ({ className, placeholder, options, value, onChange }) => 
     }
   }, [value, options]);
 
+  const handleOpen = () => {
+    if (!readOnly) {
+      setOpen(!open)
+    }
+  }
+
   return (
     <div className={`${className || ''} relative select-container z-50`}>
-      <button className="flex justify-between items-center w-full select-button" type="button" onClick={() => setOpen(!open)}>
+      <button className="flex justify-between items-center w-full select-button" type="button" onClick={() => handleOpen()}>
         {!internalValue && <span className="text-gray2">{placeholder}</span>}
         {internalValue && <span className="text-secondary font-medium">{internalValue?.label}</span>}
         {open ? <IconArrowUp /> : <IconArrowDown />}

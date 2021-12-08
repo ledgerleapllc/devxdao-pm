@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getAssignedJobs1 } from '../../../../../../../stores/api/admin/actions';
 import { formatDate, formatPrice, detectTypeUser } from '@shared/core/utils';
+import { DEFAULT_API_RECORDS } from '@shared/core/constant';
 import './style.scss';
 import { Link } from 'react-router-dom';
 
@@ -27,7 +28,7 @@ export const ActiveAssignTable = ({ outParams, user }) => {
 
   const fetchData =(pageValue = page, paramsValue = params) => {
     dispatch(
-      getAssignedJobs1({ role: detectTypeUser(user), status: 'active', ...paramsValue, page_id: pageValue }, (results, isHasMore) => {
+      getAssignedJobs1({ role: detectTypeUser(user), status: 'active', ...paramsValue, page_id: pageValue, limit: DEFAULT_API_RECORDS }, (results, isHasMore) => {
         setHasMore(isHasMore);
         appendData(results);
         setPage(prev => prev + 1);

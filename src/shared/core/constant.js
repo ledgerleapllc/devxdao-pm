@@ -45,3 +45,5 @@ export const RELATIONSHIPS = [
   "I am a director, officer, or employee of the ETA.",
   "None of the above",
 ];
+
+export const DEFAULT_API_RECORDS = 30;

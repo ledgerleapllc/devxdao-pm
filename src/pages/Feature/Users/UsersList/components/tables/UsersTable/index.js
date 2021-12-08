@@ -6,6 +6,7 @@ import { RevokeUserDialog } from '../../dialogs/RevokeUserDialog';
 import { ActivateUserDialog } from '../../dialogs/ActivateUserDialog';
 import { NewPasswordDialog } from '../../dialogs/NewPasswordDialog';
 import { detectTypeUser, formatDate } from '@shared/core/utils';
+import { DEFAULT_API_RECORDS } from '@shared/core/constant';
 import './style.scss';
 import classNames from 'classnames';
 
@@ -29,7 +30,7 @@ export const UsersTable = ({ outParams, readOnly }) => {
   
   const fetchData =(pageValue = page, paramsValue = params) => {
     dispatch(
-      getUsers({ ...paramsValue, page_id: pageValue }, user, (results, isHasMore) => {
+      getUsers({ ...paramsValue, page_id: pageValue, limit: DEFAULT_API_RECORDS }, user, (results, isHasMore) => {
         setHasMore(isHasMore);
         appendData(results);
         setPage(prev => prev + 1);

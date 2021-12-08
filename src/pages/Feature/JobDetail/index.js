@@ -14,6 +14,25 @@ import { ReactComponent as IconCheckSquare } from '@assets/icons/ic-check-square
 import { GRANTTYPES, RELATIONSHIPS } from '@shared/core/constant';
 import { AppContext } from '../../../App';
 
+const VALID_RESPONSE_SELECT = [
+  {
+    label: 'Pass',
+    value: 'Pass'
+  },
+  {
+    label: 'Pass with notes',
+    value: 'Pass with notes'
+  },
+  {
+    label: 'Failure',
+    value: 'Failure'
+  },
+  {
+    label: 'Auto-Failure',
+    value: 'Auto-Failure'
+  }
+]
+
 const MemberDetail = ({ member, index }) => {
   return (
     <div className="flex flex-col gap-9">
@@ -202,6 +221,64 @@ const ControllerCheckboxAndNotes = ({ id, setValue, watch, control, job, registe
   )
 }
 
+const ControllerDropdownAndNotes = ({ id, setValue, watch, control, job, register, fieldCheck, fieldNotes, text, textarea, disabled }) => {
+  const [show, setShow] = useState();
+  const [oldValue, setOldValue] = useState();
+  const dispatch = useDispatch();
+  const watchChange = watch(fieldNotes);
+
+  const save = () => {
+    setShow(false);
+    dispatch(updateNotes(
+      id,
+      { [fieldNotes]: watchChange },
+      () => {},
+      () => {}
+    ))
+  };
+
+  const handleTool = () => {
+    setOldValue(watchChange);
+    setShow(true);
+  }
+
+  const cancel = () => {
+    setValue(fieldNotes, oldValue);
+    setShow(false);
+  }
+
+  return (
+    <Controller
+      control={control}
+      name={fieldCheck}
+      render={({
+        field: { onChange, value },
+      }) => (
+        <div className="pl-7">
+          <label>{text}</label>
+          <Select placeholder="Select..." options={VALID_RESPONSE_SELECT} value={value} onChange={onChange} />
+          <input
+            placeholder="Notes" 
+            {...register(fieldNotes)}
+            disabled={disabled}
+            onFocus={() => handleTool()}
+            className="border border-gray3 h-9 w-full my-1.5 px-3"
+          />
+          <div className="flex justify-between">
+            <p className="text-xs text-gray2">{formatDate(job?.submitted_time)}</p>
+            {show && (
+              <div data-aos="fade-in" data-aos-duration="100" className="flex gap-1">
+                <Button className="!px-0" color="primary" size="xs" onClick={save}>Save</Button>
+                <Button className="!px-0"color="default" size="xs"  onClick={() => cancel()}>Cancel</Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    />
+  )
+}
+
 const schema = yup.object().shape({
   appl_accepted_definition: yup.bool().oneOf([true], 'Field must be checked'),
   appl_accepted_pm: yup.bool().oneOf([true], 'Field must be checked'),
@@ -222,6 +299,7 @@ const schema = yup.object().shape({
   crdao_acknowledged_receipt: yup.number().oneOf([1, 0], 'Field must be checked'),
   crdao_submitted_review: yup.number().oneOf([1, 0], 'Field must be checked'),
   crdao_submitted_subs: yup.number().oneOf([1, 0], 'Field must be checked'),
+  crdao_valid_respone: yup.string().required('Field must be choose')
 });
 
 const JobsDetail = () => {
@@ -310,17 +388,17 @@ const JobsDetail = () => {
     }
   }, []);
 
-  const assign = (item) => {
-    if (item.value) {
+  const assign = (val) => {
+    if (val) {
       dispatch(
-        assignPA({id, user_id: item.value },
+        assignPA({id, user_id: val },
           () => {
             setDateAssign(new Date());
             if (pas.filter(x => x.label === 'Unassigned').length === 0) {
               const unassign = { label: 'Unassigned', value: null };
               setPAs([unassign, ...pas]);
             }
-            job.assigner_id = item.value;
+            job.assigner_id = val;
             job.milestone_review_status = 'active';
             setJob({ ...job });
           },
@@ -640,8 +718,8 @@ const JobsDetail = () => {
                     <ControllerCheckbox control={control} field="appl_accepted_pm" text="Applicant has accepted Program Management T&C?" />
                     <ControllerCheckbox control={control} field="appl_attests_accounting" text="Applicant attests that the work represents a full accounting of the deliverables in the milestone?" />
                     <ControllerCheckbox control={control} field="appl_attests_criteria" text="Applicant attests that the work adheres to the acceptance criteria as per the Definition of Done?" />
-                    <ControllerCheckbox control={control} field="appl_submitted_corprus" text="Applicant has submitted a corprus of work?" />
-                    <ControllerCheckbox control={control} field="appl_accepted_corprus" text="Applicant has accepted the CRDAO’s review of their corprus?" />
+                    <ControllerCheckbox control={control} field="appl_submitted_corprus" text="Applicant has submitted a corpus of work?" />
+                    <ControllerCheckbox control={control} field="appl_accepted_corprus" text="Applicant has accepted the Expert Dao (CR Dao) review of their corpus?" />
                   </div>
                   <div className="py-6 flex flex-col gap-6 border-t border-gray3">
                     <h6 className="text-primary text-lg">CR Dao Checklist</h6>
@@ -654,7 +732,7 @@ const JobsDetail = () => {
                       register={register}
                       fieldCheck="crdao_acknowledged_project"
                       fieldNotes="crdao_acknowledged_project_notes"
-                      text="CRDAO has acknowledged the project Definition of Done?"
+                      text="Expert Dao (CR Dao) has acknowledged the project Definition of Done?"
                       disabled={disabled}
                     />
                     <ControllerCheckboxAndNotes
@@ -666,7 +744,7 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="crdao_accepted_pm"
                       fieldNotes="crdao_accepted_pm_notes"
-                      text="CRDAO has accepted the Program Management T&C?"
+                      text="Expert Dao (CR Dao) has accepted the Program Management T&C?"
                       disabled={disabled}
                     />
                     <ControllerCheckboxAndNotes
@@ -678,7 +756,19 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="crdao_acknowledged_receipt"
                       fieldNotes="crdao_acknowledged_receipt_notes"
-                      text="CRDAO has acknowledged receipt of the corprus of work?"
+                      text="Expert Dao (CR Dao) has acknowledged receipt of the corpus of work?"
+                      disabled={disabled}
+                    />
+                    <ControllerDropdownAndNotes
+                      setValue={setValue}
+                      id={id}
+                      control={control}
+                      job={job}
+                      watch={watch}
+                      register={register} 
+                      fieldCheck="crdao_valid_respone"
+                      fieldNotes="crdao_valid_respone_note"
+                      text="Program management has valid response from Expert Dao?"
                       disabled={disabled}
                     />
                     <ControllerCheckboxAndNotes
@@ -690,7 +780,7 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="crdao_submitted_review"
                       fieldNotes="crdao_submitted_review_notes"
-                      text="CRDAO has submitted a review of the corprus of work?"
+                      text="Expert Dao (CR Dao) has submitted a review of the corpus of work?"
                       disabled={disabled}
                     />
                     <ControllerCheckboxAndNotes
@@ -702,7 +792,7 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="crdao_submitted_subs"
                       fieldNotes="crdao_submitted_subs_notes"
-                      text="CRDAO has submitted a substantiation of the review via voting record?"
+                      text="Expert Dao (CR Dao) has submitted a substantiation of the review via voting record?"
                       disabled={disabled}
                     />
                   </div>
@@ -742,7 +832,7 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="pm_verified_corprus"
                       fieldNotes="pm_verified_corprus_notes"
-                      text="Program Management has verified corprus existence?"
+                      text="Program Management has verified corpus existence?"
                       disabled={disabled}
                     />
                     <ControllerCheckboxAndNotes
@@ -754,7 +844,7 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="pm_verified_crdao"
                       fieldNotes="pm_verified_crdao_notes"
-                      text="Program Management has verified CRDAO’s review exists?"
+                      text="Program Management has verified Expert Dao (CR Dao)’s review exists?"
                       disabled={disabled}
                     />
                     <ControllerCheckboxAndNotes
@@ -766,7 +856,7 @@ const JobsDetail = () => {
                       register={register} 
                       fieldCheck="pm_verified_subs"
                       fieldNotes="pm_verified_subs_notes"
-                      text="Program Management has verified CRDAO substantiation (voting record) existence?"
+                      text="Program Management has verified Expert Dao (CR Dao) substantiation (voting record) existence?"
                       disabled={disabled}
                     />
                     <div>

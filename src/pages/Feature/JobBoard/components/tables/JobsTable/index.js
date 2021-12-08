@@ -5,6 +5,7 @@ import { getJobs } from '../../../../../../stores/api/admin/actions';
 import './style.scss';
 import { formatDate, formatPrice } from '@shared/core/utils';
 import { useHistory } from 'react-router';
+import { DEFAULT_API_RECORDS } from '@shared/core/constant';
 
 export const JobsTable = ({ outParams }) => {
   const {
@@ -25,7 +26,7 @@ export const JobsTable = ({ outParams }) => {
   
   const fetchData =(pageValue = page, paramsValue = params) => {
     dispatch(
-      getJobs({ ...paramsValue, page_id: pageValue }, (results, isHasMore) => {
+      getJobs({ ...paramsValue, page_id: pageValue, limit: DEFAULT_API_RECORDS }, (results, isHasMore) => {
         setHasMore(isHasMore);
         appendData(results);
         setPage(prev => prev + 1);
