@@ -1,0 +1,2 @@
+(this["webpackJsonppeace-u"]=this["webpackJsonppeace-u"]||[]).push([[14],{285:function(e,t,c){"use strict";c.r(t);var n=c(0),a=c(10),u=c(1),p=Object(n.lazy)((function(){return Promise.all([c.e(0),c.e(7)]).then(c.bind(null,280))}));t.default=function(){var e=Object(a.j)().path;return Object(u.jsx)(a.d,{children:Object(u.jsx)(a.b,{path:"".concat(e),exact:!0,component:p})})}}}]);
+//# sourceMappingURL=14.bbe5b116.chunk.js.map
