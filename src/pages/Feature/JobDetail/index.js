@@ -328,6 +328,8 @@ const JobsDetail = () => {
     resolver: yupResolver(schema),
   });
 
+  const fullData = watch();
+
   useEffect(() => {
     document.body.classList.add('scroll-window');
     setLoading(true);
@@ -419,6 +421,18 @@ const JobsDetail = () => {
     }  
   }
 
+  const getColor = () => {
+    if (!formState.isValid) {
+      return 'default';
+    }
+    const indx = Object.keys(fullData).find(x => fullData[x] === 0 || fullData[x] === false);
+    if (indx) {
+      return 'danger';
+    } else {
+      return 'success';
+    }
+  }
+
   const renderMilestoneStep = () => {
     const index = job?.milestones.findIndex(x => +x.id === +job?.milestone_id);
     return `${index + 1}/${job?.milestones.length}`;
@@ -448,7 +462,8 @@ const JobsDetail = () => {
     });
     openDialog(
       <ConfirmSubmitReviewDialog 
-        data={params} 
+        data={params}
+        color={getColor()}
         afterClosed={(result) => {
           if (result) {
             openSnack('primary', 'Submit successfully!');
@@ -877,7 +892,7 @@ const JobsDetail = () => {
               <Button
                 type="submit"
                 className="ml-auto block !w-3/5 mt-5 mb-2.5 px-6" 
-                color="primary"
+                color={getColor()}
                 disabled={!formState.isValid} 
               >
                 Submit Review
