@@ -36,7 +36,7 @@
     "eject": "react-scripts eject",
     "start": "PORT=3001 craco start",
     "dev": "PORT=3001 craco start",
-    "build": "craco build",
+    "build": "craco build && sudo chmod +x build-htaccess && ./build-htaccess",
     "test": "craco test",
     "lint": "eslint ."
   },
