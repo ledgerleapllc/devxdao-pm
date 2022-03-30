@@ -4,7 +4,7 @@ import { Dialog } from "@shared/partials/dialog/Provider";
 import { useDispatch } from "react-redux";
 import { submitReview } from '@stores/api/pa/actions';
 
-export const ConfirmSubmitReviewDialog = ({ data, className, close }) => {
+export const ConfirmSubmitReviewDialog = ({ data, className, close, color = 'primary' }) => {
   const props = {
     className,
   };
@@ -45,7 +45,7 @@ export const ConfirmSubmitReviewDialog = ({ data, className, close }) => {
             onClick={submit}
             isLoading={loading}
             className="mx-auto block !w-3/5 mb-2.5 px-6"
-            color="primary"
+            color={color}
             disabled={loading}>
               Submit Review
           </Button>
