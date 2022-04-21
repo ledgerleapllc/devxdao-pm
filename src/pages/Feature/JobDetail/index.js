@@ -425,7 +425,8 @@ const JobsDetail = () => {
     if (!formState.isValid) {
       return 'default';
     }
-    const indx = Object.keys(fullData).find(x => fullData[x] === 0 || fullData[x] === false);
+
+    const indx = Object.keys(fullData).find(x => fullData[x] === 0 || fullData[x] === '0' || fullData[x] === false);
     if (indx) {
       return 'danger';
     } else {
