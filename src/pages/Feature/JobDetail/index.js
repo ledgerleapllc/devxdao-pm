@@ -288,17 +288,17 @@ const schema = yup.object().shape({
   appl_accepted_corprus: yup.bool().oneOf([true], 'Field must be checked'),
   // PM
   pm_submitted_admin_notes: yup.string().required(''),
-  pm_submitted_evidence: yup.number().oneOf([1, 0], 'Field must be checked'),
-  pm_submitted_admin: yup.number().oneOf([1, 0], 'Field must be checked'),
-  pm_verified_corprus: yup.number().oneOf([1, 0], 'Field must be checked'),
-  pm_verified_crdao: yup.number().oneOf([1, 0], 'Field must be checked'),
-  pm_verified_subs: yup.number().oneOf([1, 0], 'Field must be checked'),
+  pm_submitted_evidence: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  pm_submitted_admin: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  pm_verified_corprus: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  pm_verified_crdao: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  pm_verified_subs: yup.number().required().oneOf([1, 0], 'Field must be checked'),
   //CR
-  crdao_acknowledged_project: yup.number().oneOf([1, 0], 'Field must be checked'),
-  crdao_accepted_pm: yup.number().oneOf([1, 0], 'Field must be checked'),
-  crdao_acknowledged_receipt: yup.number().oneOf([1, 0], 'Field must be checked'),
-  crdao_submitted_review: yup.number().oneOf([1, 0], 'Field must be checked'),
-  crdao_submitted_subs: yup.number().oneOf([1, 0], 'Field must be checked'),
+  crdao_acknowledged_project: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  crdao_accepted_pm: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  crdao_acknowledged_receipt: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  crdao_submitted_review: yup.number().required().oneOf([1, 0], 'Field must be checked'),
+  crdao_submitted_subs: yup.number().required().oneOf([1, 0], 'Field must be checked'),
   crdao_valid_respone: yup.string().required('Field must be choose')
 });
 
@@ -420,6 +420,8 @@ const JobsDetail = () => {
       );
     }  
   }
+
+  console.log(fullData, formState.isValid);
 
   const getColor = () => {
     if (!formState.isValid) {
