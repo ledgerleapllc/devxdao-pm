@@ -87,7 +87,7 @@ Table.HeaderCell = props => {
       className={`
         ${props.className || ''} 
         col col-${props.index} 
-        text-sm`}
+        text-sm pr-2`}
     >
       <button
         type="button"
