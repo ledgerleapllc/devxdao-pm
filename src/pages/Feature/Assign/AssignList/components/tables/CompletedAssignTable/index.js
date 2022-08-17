@@ -70,10 +70,10 @@ export const CompletedAssignTable = ({ outParams, user }) => {
       onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell>
+        <Table.HeaderCell sortKey="milestone_review.assigned_at">
           <p>Date Assigned</p>
         </Table.HeaderCell>
-        <Table.HeaderCell sortKey="milestone_review.assigned_at">
+        <Table.HeaderCell sortKey="milestone_review.reviewed_at">
           <p>Date Completed</p>
         </Table.HeaderCell>
         <Table.HeaderCell>

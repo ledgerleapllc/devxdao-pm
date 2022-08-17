@@ -69,10 +69,10 @@ export const ActiveAssignTable = ({ outParams, user }) => {
       dataLength={data.length}
     >
       <Table.Header>
-        <Table.HeaderCell>
+        <Table.HeaderCell sortKey="milestone.submitted_time">
           <p>Date Submitted</p>
         </Table.HeaderCell>
-        <Table.HeaderCell sortKey="milestone.submitted_time">
+        <Table.HeaderCell sortKey="milestone_review.assigned_at">
           <p>Date Assigned</p>
         </Table.HeaderCell>
         {/* <Table.HeaderCell>
