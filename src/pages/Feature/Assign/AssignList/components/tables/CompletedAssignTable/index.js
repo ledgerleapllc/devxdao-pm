@@ -50,6 +50,16 @@ export const CompletedAssignTable = ({ outParams, user }) => {
     return `${index + 1}/${row.milestones.length}`;
   }
 
+  const handleSort = async (key, direction) => {
+    const newParams = {
+      sort_key: key,
+      sort_direction: direction,
+    };
+    setParams(newParams);
+    resetData();
+    fetchData(1, newParams);
+  };
+
   return (
     <Table
       {...register}
@@ -57,6 +67,7 @@ export const CompletedAssignTable = ({ outParams, user }) => {
       onLoadMore={fetchData}
       hasMore={hasMore}
       dataLength={data.length}
+      onSort={handleSort}
     >
       <Table.Header>
         <Table.HeaderCell>

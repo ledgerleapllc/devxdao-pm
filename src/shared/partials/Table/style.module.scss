@@ -6,9 +6,9 @@
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
 }
-.desc {
+:global(.desc) {
   border-top: 7px solid black;
 }
-.asc {
+:global(.asc) {
   border-bottom: 7px solid black;
 }

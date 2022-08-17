@@ -49,12 +49,23 @@ export const ActiveAssignTable = ({ outParams, user }) => {
     return `${index + 1}/${row.milestones.length}`;
   }
 
+  const handleSort = async (key, direction) => {
+    const newParams = {
+      sort_key: key,
+      sort_direction: direction,
+    };
+    setParams(newParams);
+    resetData();
+    fetchData(1, newParams);
+  };
+
   return (
     <Table
       {...register}
       className="active-assign-table h-full"
       onLoadMore={fetchData}
       hasMore={hasMore}
+      onSort={handleSort}
       dataLength={data.length}
     >
       <Table.Header>
