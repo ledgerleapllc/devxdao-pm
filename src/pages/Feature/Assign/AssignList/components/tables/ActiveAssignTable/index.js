@@ -61,7 +61,7 @@ export const ActiveAssignTable = ({ outParams, user }) => {
         <Table.HeaderCell>
           <p>Date Submitted</p>
         </Table.HeaderCell>
-        <Table.HeaderCell>
+        <Table.HeaderCell sortKey="milestone.submitted_time">
           <p>Date Assigned</p>
         </Table.HeaderCell>
         {/* <Table.HeaderCell>

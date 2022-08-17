@@ -62,7 +62,7 @@ export const CompletedAssignTable = ({ outParams, user }) => {
         <Table.HeaderCell>
           <p>Date Assigned</p>
         </Table.HeaderCell>
-        <Table.HeaderCell>
+        <Table.HeaderCell sortKey="milestone_review.assigned_at">
           <p>Date Completed</p>
         </Table.HeaderCell>
         <Table.HeaderCell>
